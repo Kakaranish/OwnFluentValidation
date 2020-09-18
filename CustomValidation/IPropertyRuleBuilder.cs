@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using CustomValidation.Types;
 
 namespace CustomValidation
 {
     public interface IPropertyRuleBuilder
     {
-        IEnumerable<PropertyValidationError> Validate(object obj);
+        PropertyValidationResult Validate(object obj);
     }
 }

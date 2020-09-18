@@ -1,13 +1,13 @@
 ﻿using System;
 
-namespace CustomValidation
+namespace CustomValidation.Types
 {
-    public class PropertyValidationError
+    public class RuleValidationError
     {
         public string ErrorMessage { get; }
         public string ErrorCode { get; }
 
-        public PropertyValidationError(string errorMessage, string errorCode = null)
+        public RuleValidationError(string errorMessage, string errorCode = null)
         {
             ErrorMessage = errorMessage ?? throw new ArgumentNullException(nameof(errorMessage));
             ErrorCode = errorCode;

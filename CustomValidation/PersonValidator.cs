@@ -6,6 +6,7 @@
         {
             RuleFor(x => x.Age)
                 .AddRule(x => x > 21, "Must be > 21")
+                .StopValidationAfterFailure()
                 .IsGreaterThan(21);
 
             RuleFor(x => x.FirstName)
