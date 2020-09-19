@@ -1,14 +1,9 @@
-﻿using CustomValidation.Types;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using CustomValidation.Types;
 
-namespace CustomValidation
+namespace CustomValidation.Rules
 {
-    public interface IAsyncValidationRule
-    {
-        Task<RuleValidationResult> Validate(object propertyValueObj);
-    }
-
     public class AsyncValidationRule<TProperty> : ValidationRuleBase, IAsyncValidationRule
     {
         private readonly Func<TProperty, Task<bool>> _validationPredicate;

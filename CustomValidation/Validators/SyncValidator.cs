@@ -1,17 +1,18 @@
 ﻿using System;
-using CustomValidation.Types;
 using System.Linq;
 using System.Linq.Expressions;
+using CustomValidation.PropertyValidation;
+using CustomValidation.Types;
 
-namespace CustomValidation
+namespace CustomValidation.Validators
 {
     public abstract class SyncValidator<TObject> : ValidatorBase<TObject>, ISyncValidator<TObject>
     {
         public ValidationResult Validate(TObject objToValidate)
         {
-            var casted = PropertyValidationBuilders.Cast<ISyncPropertyValidator>();
+            var propertyValidators = PropertyValidationBuilders.Cast<ISyncPropertyValidator>();
             
-            var propertyValidationErrors = casted.Select(propertyRuleBuilder =>
+            var propertyValidationErrors = propertyValidators.Select(propertyRuleBuilder =>
                 propertyRuleBuilder.Validate(objToValidate));
 
             return new ValidationResult(propertyValidationErrors);
@@ -19,15 +20,7 @@ namespace CustomValidation
 
         protected SyncPropertyValidationBuilder<TObject, TProp> RuleFor<TProp>(Expression<Func<TObject, TProp>> expression)
         {
-            if (!(expression.Body is MemberExpression memberExpression))
-            {
-                memberExpression = ((UnaryExpression)expression.Body).Operand as MemberExpression;
-            }
-
-            if (memberExpression == null)
-            {
-                throw new InvalidOperationException(nameof(memberExpression));
-            }
+            var memberExpression = ExtractMemberExpression(expression);
 
             var propertyRuleBuilder = new SyncPropertyValidationBuilder<TObject, TProp>(memberExpression);
             PropertyValidationBuilders.Add(propertyRuleBuilder);

@@ -1,13 +1,8 @@
-﻿using CustomValidation.Types;
-using System;
+﻿using System;
+using CustomValidation.Types;
 
-namespace CustomValidation
+namespace CustomValidation.Rules
 {
-    public interface ISyncValidationRule
-    {
-        RuleValidationResult Validate(object propertyValueObj);
-    }
-    
     public class SyncValidationRule<TProperty> : ValidationRuleBase, ISyncValidationRule
     {
         private readonly Predicate<TProperty> _validationPredicate;

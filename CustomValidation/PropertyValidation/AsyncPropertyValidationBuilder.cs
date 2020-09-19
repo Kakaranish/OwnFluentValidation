@@ -1,10 +1,11 @@
-﻿using CustomValidation.Types;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using CustomValidation.Rules;
+using CustomValidation.Types;
 
-namespace CustomValidation
+namespace CustomValidation.PropertyValidation
 {
     public class AsyncPropertyValidationBuilder<TObject, TProperty> : PropertyValidationBuilderBase<TObject, TProperty>,
         IAsyncPropertyValidator

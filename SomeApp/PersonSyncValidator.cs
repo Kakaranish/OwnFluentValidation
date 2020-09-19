@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using CustomValidation;
+using CustomValidation.Validators;
 
 namespace SomeApp
 {

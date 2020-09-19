@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using CustomValidation.Types;
 
-namespace CustomValidation
+namespace CustomValidation.Validators
 {
     public interface IAsyncValidator<in TObject>
     {

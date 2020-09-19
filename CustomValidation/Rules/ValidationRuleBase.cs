@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CustomValidation
+namespace CustomValidation.Rules
 {
     public abstract class ValidationRuleBase
     {

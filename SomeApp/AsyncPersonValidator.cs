@@ -1,5 +1,6 @@
 ﻿using CustomValidation;
 using System.Threading.Tasks;
+using CustomValidation.Validators;
 
 namespace SomeApp
 {
@@ -11,7 +12,7 @@ namespace SomeApp
                 .AddAsyncRule(async firstName =>
                 {
                     await Task.Delay(1000);
-                    return true;
+                    return false;
                 }, "SOME ERROR XD")
                 .IsNotNull();
 

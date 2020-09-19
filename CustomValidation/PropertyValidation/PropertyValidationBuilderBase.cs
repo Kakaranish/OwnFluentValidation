@@ -3,15 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using CustomValidation.Rules;
 
-namespace CustomValidation
+namespace CustomValidation.PropertyValidation
 {
-    // TODO: Ensure really needed
-    public interface IPropertyValidationBuilderMarker
-    {
-    }
-
-    public abstract class PropertyValidationBuilderBase<TObject, TProperty> : IPropertyValidationBuilderMarker
+    public abstract class PropertyValidationBuilderBase<TObject, TProperty> : IPropertyValidationBuilder
     {
         protected readonly IList<ValidationRuleBase> Rules = new List<ValidationRuleBase>();
 

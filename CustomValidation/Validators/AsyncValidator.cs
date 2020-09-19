@@ -1,11 +1,12 @@
 ﻿using System;
-using CustomValidation.Types;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using CustomValidation.PropertyValidation;
+using CustomValidation.Types;
 
-namespace CustomValidation
+namespace CustomValidation.Validators
 {
     public abstract class AsyncValidator<TObject> : ValidatorBase<TObject>, IAsyncValidator<TObject>
     {
@@ -25,15 +26,7 @@ namespace CustomValidation
 
         protected AsyncPropertyValidationBuilder<TObject, TProp> RuleFor<TProp>(Expression<Func<TObject, TProp>> expression)
         {
-            if (!(expression.Body is MemberExpression memberExpression))
-            {
-                memberExpression = ((UnaryExpression)expression.Body).Operand as MemberExpression;
-            }
-
-            if (memberExpression == null)
-            {
-                throw new InvalidOperationException(nameof(memberExpression));
-            }
+            var memberExpression = ExtractMemberExpression(expression);
 
             var propertyRuleBuilder = new AsyncPropertyValidationBuilder<TObject, TProp>(memberExpression);
             PropertyValidationBuilders.Add(propertyRuleBuilder);
