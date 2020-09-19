@@ -4,8 +4,8 @@ namespace CustomValidation
 {
     public static class ValidationExtensions
     {
-        public static PropertyValidationBuilder<TObject, TProperty> IsEqual<TObject, TProperty>(
-            this PropertyValidationBuilder<TObject, TProperty> propertyValidationBuilder, TProperty value)
+        public static PropertyValidationBuilderBase<TObject, TProperty> IsEqual<TObject, TProperty>(
+            this PropertyValidationBuilderBase<TObject, TProperty> propertyValidationBuilder, TProperty value)
             where TProperty : IEquatable<TProperty>
         {
             var message = $"Value must equal to {value}";
@@ -15,8 +15,8 @@ namespace CustomValidation
             return propertyValidationBuilder;
         }
 
-        public static PropertyValidationBuilder<TObject, string> IsEqual<TObject>(
-            this PropertyValidationBuilder<TObject, string> propertyValidationBuilder, string value, 
+        public static PropertyValidationBuilderBase<TObject, string> IsEqual<TObject>(
+            this PropertyValidationBuilderBase<TObject, string> propertyValidationBuilder, string value, 
             StringComparison stringComparison = StringComparison.CurrentCulture)
         {
             var message = $"Value must equal to {value}";
@@ -26,8 +26,8 @@ namespace CustomValidation
             return propertyValidationBuilder;
         }
 
-        public static PropertyValidationBuilder<TObject, TNumber> IsGreaterThan<TObject, TNumber>(
-            this PropertyValidationBuilder<TObject, TNumber> propertyValidationBuilder, TNumber value)
+        public static PropertyValidationBuilderBase<TObject, TNumber> IsGreaterThan<TObject, TNumber>(
+            this PropertyValidationBuilderBase<TObject, TNumber> propertyValidationBuilder, TNumber value)
             where TNumber : IComparable<TNumber>
         {
             var message = $"Value must be greater than {value}";
@@ -37,8 +37,8 @@ namespace CustomValidation
             return propertyValidationBuilder;
         }
 
-        public static PropertyValidationBuilder<TObject, TNumber> IsNotNull<TObject, TNumber>(
-            this PropertyValidationBuilder<TObject, TNumber> propertyValidationBuilder)
+        public static PropertyValidationBuilderBase<TObject, TNumber> IsNotNull<TObject, TNumber>(
+            this PropertyValidationBuilderBase<TObject, TNumber> propertyValidationBuilder)
         {
             var message = "Value cannot be null";
             const string errorCode = "NOT_NULL";
@@ -47,8 +47,8 @@ namespace CustomValidation
             return propertyValidationBuilder;
         }
 
-        public static PropertyValidationBuilder<TObject, string> IsNotNullOrEmpty<TObject>(
-            this PropertyValidationBuilder<TObject, string> propertyValidationBuilder)
+        public static PropertyValidationBuilderBase<TObject, string> IsNotNullOrEmpty<TObject>(
+            this PropertyValidationBuilderBase<TObject, string> propertyValidationBuilder)
         {
             var message = "Value cannot be null or empty string";
             const string errorCode = "NOT_NULL_OR_EMPTY";
@@ -57,8 +57,8 @@ namespace CustomValidation
             return propertyValidationBuilder;
         }
 
-        public static PropertyValidationBuilder<TObject, string> IsNotNullOrWhiteSpace<TObject>(
-            this PropertyValidationBuilder<TObject, string> propertyValidationBuilder)
+        public static PropertyValidationBuilderBase<TObject, string> IsNotNullOrWhiteSpace<TObject>(
+            this PropertyValidationBuilderBase<TObject, string> propertyValidationBuilder)
         {
             var message = "Value cannot be null or whitespace";
             const string errorCode = "NOT_NULL_OR_WHITE_SPACE";

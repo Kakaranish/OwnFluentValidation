@@ -1,16 +1,16 @@
-﻿using CustomValidation;
+﻿using System.Threading.Tasks;
+using CustomValidation;
 
 namespace SomeApp
 {
-    public class PersonValidator : BaseValidator<Person>
+    public class PersonSyncValidator : SyncValidator<Person>
     {
         protected override void SetupRules()
         {
             RuleFor(x => x.Age)
                 .AddRule(x => x > 21, "Must be > 21")
                 .StopValidationAfterFailure()
-                .IsGreaterThan(21)
-                .Validate(1);
+                .IsGreaterThan(21);
 
             RuleFor(x => x.FirstName)
                 .IsNotNullOrWhiteSpace().WithMessage("Null or whitespaces").StopValidationAfterFailure()

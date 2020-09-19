@@ -2,7 +2,7 @@
 
 namespace CustomValidation
 {
-    public interface IValidator<in TObject>
+    public interface ISyncValidator<in TObject>
     {
         ValidationResult Validate(TObject objToValidate);
     }
