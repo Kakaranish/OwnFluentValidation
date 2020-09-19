@@ -6,45 +6,33 @@ using CustomValidation.Types;
 
 namespace CustomValidation
 {
-    public class PropertyValidationBuilder<TObject, TProperty> : IPropertyRuleBuilder
+    public class PropertyValidationBuilder<TObject, TProperty> : IPropertyValidator
     {
         private readonly IList<ValidationRule<TProperty>> _rules = new List<ValidationRule<TProperty>>();
         private readonly MemberExpression _memberExpression;
         private string _propertyDisplayName;
 
-        public PropertyValidationBuilder(MemberExpression memberExpression)
+        internal PropertyValidationBuilder(MemberExpression memberExpression)
         {
             _memberExpression = memberExpression ?? throw new ArgumentNullException(nameof(memberExpression));
             _propertyDisplayName = _memberExpression.Member.Name;
         }
 
         public PropertyValidationBuilder<TObject, TProperty> AddRule(Expression<Predicate<TProperty>> validationPredicate,
-            string errorMessage)
+            string errorMessage, string errorCode = null)
         {
-            var rule = new ValidationRule<TProperty>(validationPredicate, errorMessage);
+            var rule = new ValidationRule<TProperty>(validationPredicate, errorMessage, errorCode);
             _rules.Add(rule);
 
             return this;
         }
 
-        public PropertyValidationBuilder<TObject, TProperty> StopValidationAfterFailure()
+        public PropertyValidationResult Validate(object obj)
         {
-            if (_rules.Any())
-            {
-                _rules.Last().StopValidationAfterFailure = true;
-            }
-
-            return this;
+            return Validate((TObject)obj);
         }
 
-        public PropertyValidationBuilder<TObject, TProperty> SetPropertyDisplayName(string propertyDisplayName)
-        {
-            _propertyDisplayName = propertyDisplayName ?? throw new ArgumentNullException(nameof(propertyDisplayName));
-
-            return this;
-        }
-
-        public PropertyValidationResult Validate(TObject obj)
+        private PropertyValidationResult Validate(TObject obj)
         {
             var property = typeof(TObject).GetProperty(_memberExpression.Member.Name);
             if (property == null)
@@ -53,7 +41,7 @@ namespace CustomValidation
             }
 
             var propertyValueAsObj = property.GetValue(obj);
-            var propertyValue = (TProperty) Convert.ChangeType(propertyValueAsObj, typeof(TProperty));
+            var propertyValue = (TProperty)Convert.ChangeType(propertyValueAsObj, typeof(TProperty));
 
             var ruleValidationErrors = new List<RuleValidationError>();
             foreach (var rule in _rules)
@@ -73,9 +61,36 @@ namespace CustomValidation
             return new PropertyValidationResult(_propertyDisplayName, ruleValidationErrors);
         }
 
-        public PropertyValidationResult Validate(object obj)
+        public PropertyValidationBuilder<TObject, TProperty> SetPropertyDisplayName(string propertyDisplayName)
         {
-            return Validate((TObject) obj);
+            _propertyDisplayName = propertyDisplayName ?? throw new ArgumentNullException(nameof(propertyDisplayName));
+
+            return this;
+        }
+
+        public PropertyValidationBuilder<TObject, TProperty> StopValidationAfterFailure()
+        {
+            var lastRule = _rules.LastOrDefault();
+            if (lastRule != null)
+            {
+                lastRule.StopValidationAfterFailure = true;
+            }
+
+            return this;
+        }
+
+        public PropertyValidationBuilder<TObject, TProperty> WithMessage(string message)
+        {
+            _rules.LastOrDefault()?.OverrideErrorMessage(message);
+
+            return this;
+        }
+
+        public PropertyValidationBuilder<TObject, TProperty> WithCode(string code)
+        {
+            _rules.LastOrDefault()?.OverrideErrorCode(code);
+
+            return this;
         }
     }
 }

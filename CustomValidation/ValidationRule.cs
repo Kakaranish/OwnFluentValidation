@@ -4,12 +4,12 @@ using CustomValidation.Types;
 
 namespace CustomValidation
 {
-    public class ValidationRule<TProperty>
+    internal class ValidationRule<TProperty>
     {
         private readonly Expression<Predicate<TProperty>> _validationPredicate;
-        private readonly string _errorMessage;
-        private readonly string _errorCode;
-        
+        private string _errorMessage;
+        private string _errorCode;
+
         public bool StopValidationAfterFailure { get; set; } = false;
 
         public ValidationRule(Expression<Predicate<TProperty>> validationPredicate, string errorMessage, string errorCode = null)
@@ -27,6 +27,15 @@ namespace CustomValidation
                 : null;
 
             return new RuleValidationResult {RuleValidationError = propertyValidationError};
+        }
+
+        public void OverrideErrorMessage(string errorMessage)
+        {
+            _errorMessage = errorMessage ?? throw new ArgumentNullException(nameof(errorMessage));
+        }
+        public void OverrideErrorCode(string errorCode)
+        {
+            _errorCode = errorCode;
         }
     }
 }

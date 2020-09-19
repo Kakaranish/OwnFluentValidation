@@ -6,9 +6,9 @@ using CustomValidation.Types;
 
 namespace CustomValidation
 {
-    public abstract class BaseValidator<TObject>
+    public abstract class BaseValidator<TObject> : IValidator<TObject>
     {
-        private readonly IList<IPropertyRuleBuilder> _propertyRuleBuilders = new List<IPropertyRuleBuilder>();
+        private readonly IList<IPropertyValidator> _propertyRuleBuilders = new List<IPropertyValidator>();
         protected BaseValidator()
         {
             SetupRules();
@@ -16,7 +16,7 @@ namespace CustomValidation
 
         protected abstract void SetupRules();
 
-        public virtual ValidationResult Validate(TObject objToValidate)
+        public ValidationResult Validate(TObject objToValidate)
         {
             var propertyValidationErrors = _propertyRuleBuilders.Select(propertyRuleBuilder =>
                 propertyRuleBuilder.Validate(objToValidate));

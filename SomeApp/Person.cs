@@ -1,4 +1,4 @@
-﻿namespace CustomValidation
+﻿namespace SomeApp
 {
     public class Person
     {

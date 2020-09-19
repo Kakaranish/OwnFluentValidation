@@ -1,17 +1,21 @@
-﻿namespace CustomValidation
+﻿using System;
+using CustomValidation;
+
+namespace SomeApp
 {
-    class Program
+    public class Program
     {
         static void Main(string[] args)
         {
             var person = new Person
             {
                 FirstName = "joe",
-                LastName = "Doe",
+                LastName = "   ",
                 Age = 13
             };
 
-            var personValidator = new PersonValidator();
+            IValidator<Person> personValidator = new PersonValidator();
+
             var validationErrors = personValidator.Validate(person);
         }
     }
