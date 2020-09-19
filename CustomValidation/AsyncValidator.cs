@@ -1,4 +1,5 @@
-﻿using CustomValidation.Types;
+﻿using System;
+using CustomValidation.Types;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -8,12 +9,6 @@ namespace CustomValidation
 {
     public abstract class AsyncValidator<TObject> : ValidatorBase<TObject>, IAsyncValidator<TObject>
     {
-        protected sealed override PropertyValidationBuilderBase<TObject, TProp> GetPropertyValidationBuilder<TProp>(
-            MemberExpression memberExpression)
-        {
-            return new AsyncPropertyValidationBuilder<TObject, TProp>(memberExpression);
-        }
-
         public async Task<ValidationResult> Validate(TObject objToValidate)
         {
             var casted = PropertyValidationBuilders.Cast<IAsyncPropertyValidator>();
@@ -26,6 +21,24 @@ namespace CustomValidation
             }
 
             return new ValidationResult(propertyValidationErrors);
+        }
+
+        protected AsyncPropertyValidationBuilder<TObject, TProp> RuleFor<TProp>(Expression<Func<TObject, TProp>> expression)
+        {
+            if (!(expression.Body is MemberExpression memberExpression))
+            {
+                memberExpression = ((UnaryExpression)expression.Body).Operand as MemberExpression;
+            }
+
+            if (memberExpression == null)
+            {
+                throw new InvalidOperationException(nameof(memberExpression));
+            }
+
+            var propertyRuleBuilder = new AsyncPropertyValidationBuilder<TObject, TProp>(memberExpression);
+            PropertyValidationBuilders.Add(propertyRuleBuilder);
+
+            return propertyRuleBuilder;
         }
     }
 }

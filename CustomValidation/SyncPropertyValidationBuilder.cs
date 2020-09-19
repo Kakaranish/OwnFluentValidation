@@ -1,12 +1,13 @@
-﻿using System;
+﻿using CustomValidation.Types;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
-using CustomValidation.Types;
 
 namespace CustomValidation
 {
     public class SyncPropertyValidationBuilder<TObject, TProperty> : PropertyValidationBuilderBase<TObject, TProperty>,
-        IPropertyValidator
+        ISyncPropertyValidator
     {
         internal SyncPropertyValidationBuilder(MemberExpression memberExpression) : base(memberExpression)
         {
@@ -19,22 +20,16 @@ namespace CustomValidation
 
         private PropertyValidationResult Validate(TObject obj)
         {
-            var property = typeof(TObject).GetProperty(MemberExpression.Member.Name);
-            if (property == null)
-            {
-                throw new InvalidOperationException("Property from member expression is null");
-            }
-
-            var propertyValueAsObj = property.GetValue(obj);
+            var propertyValueAsObj = Property.GetValue(obj);
             var propertyValue = (TProperty)Convert.ChangeType(propertyValueAsObj, typeof(TProperty));
 
             var ruleValidationErrors = new List<RuleValidationError>();
-            foreach (var rule in Rules)
+            foreach (var rule in Rules.Cast<SyncValidationRule<TProperty>>())
             {
                 var propValidationResult = rule.Validate(propertyValue);
                 if (propValidationResult.Failure)
                 {
-                    ruleValidationErrors.Add(propValidationResult.RuleValidationError);
+                    ruleValidationErrors.Add(propValidationResult.Error);
 
                     if (rule.StopValidationAfterFailure)
                     {

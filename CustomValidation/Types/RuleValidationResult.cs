@@ -2,8 +2,8 @@
 {
     public class RuleValidationResult
     {
-        public RuleValidationError RuleValidationError { get; set; }
-        public bool Success => RuleValidationError == null;
+        public RuleValidationError Error { get; set; }
+        public bool Success => Error == null;
         public bool Failure => !Success;
     }
 }

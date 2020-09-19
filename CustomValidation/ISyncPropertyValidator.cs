@@ -2,7 +2,7 @@
 
 namespace CustomValidation
 {
-    public interface IPropertyValidator
+    public interface ISyncPropertyValidator
     {
         PropertyValidationResult Validate(object obj);
     }

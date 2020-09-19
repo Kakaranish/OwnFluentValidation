@@ -2,30 +2,43 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace CustomValidation
 {
+    // TODO: Ensure really needed
     public interface IPropertyValidationBuilderMarker
     {
     }
 
     public abstract class PropertyValidationBuilderBase<TObject, TProperty> : IPropertyValidationBuilderMarker
     {
-        protected readonly IList<ValidationRule<TProperty>> Rules = new List<ValidationRule<TProperty>>();
+        protected readonly IList<ValidationRuleBase> Rules = new List<ValidationRuleBase>();
 
-        protected readonly MemberExpression MemberExpression;
+        protected readonly PropertyInfo Property;
         protected string PropertyDisplayName;
 
         protected PropertyValidationBuilderBase(MemberExpression memberExpression)
         {
-            MemberExpression = memberExpression ?? throw new ArgumentNullException(nameof(memberExpression));
-            PropertyDisplayName = MemberExpression.Member.Name;
+            if (memberExpression == null)
+            {
+                throw new ArgumentNullException(nameof(memberExpression));
+            }
+
+            var property = typeof(TObject).GetProperty(memberExpression.Member.Name);
+            if (property == null)
+            {
+                throw new InvalidOperationException("Property from member expression is null");
+            }
+            Property = property;
+
+            PropertyDisplayName = Property.Name;
         }
 
-        public PropertyValidationBuilderBase<TObject, TProperty> AddRule(Expression<Predicate<TProperty>> validationPredicate,
+        public PropertyValidationBuilderBase<TObject, TProperty> AddRule(Predicate<TProperty> validationPredicate,
             string errorMessage, string errorCode = null)
         {
-            var rule = new ValidationRule<TProperty>(validationPredicate, errorMessage, errorCode);
+            var rule = new SyncValidationRule<TProperty>(validationPredicate, errorMessage, errorCode);
             Rules.Add(rule);
 
             return this;

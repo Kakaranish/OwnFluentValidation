@@ -4,43 +4,31 @@ using System.Threading.Tasks;
 
 namespace CustomValidation
 {
-    public interface IRuleValidatorAsync<in TProperty>
+    public interface IAsyncValidationRule
     {
-        Task<RuleValidationResult> ValidateAsync(TProperty propertyValue);
+        Task<RuleValidationResult> Validate(object propertyValueObj);
     }
 
-    public class AsyncValidationRule<TProperty> : IRuleValidatorAsync<TProperty>
+    public class AsyncValidationRule<TProperty> : ValidationRuleBase, IAsyncValidationRule
     {
         private readonly Func<TProperty, Task<bool>> _validationPredicate;
-        private string _errorMessage;
-        private string _errorCode;
 
-        public bool StopValidationAfterFailure { get; set; } = false;
-
-        public AsyncValidationRule(Func<TProperty, Task<bool>> validationPredicate, string errorMessage, string errorCode = null)
+        public AsyncValidationRule(Func<TProperty, Task<bool>> validationPredicate, string errorMessage, string errorCode = null) 
+            : base(errorMessage, errorCode)
         {
             _validationPredicate = validationPredicate ?? throw new ArgumentNullException(nameof(validationPredicate));
-            _errorMessage = errorMessage ?? throw new ArgumentNullException(nameof(errorMessage));
-            _errorCode = errorCode;
         }
 
-        public async Task<RuleValidationResult> ValidateAsync(TProperty propertyValue)
+        public async Task<RuleValidationResult> Validate(object propertyValueObj)
         {
+            var propertyValue = (TProperty) propertyValueObj;
+
             var validationSucceeded = await _validationPredicate(propertyValue);
             var propertyValidationError = !validationSucceeded
-                ? new RuleValidationError(_errorMessage, _errorCode)
+                ? new RuleValidationError(ErrorMessage, ErrorCode)
                 : null;
 
-            return new RuleValidationResult { RuleValidationError = propertyValidationError };
-        }
-
-        public void OverrideErrorMessage(string errorMessage)
-        {
-            _errorMessage = errorMessage ?? throw new ArgumentNullException(nameof(errorMessage));
-        }
-        public void OverrideErrorCode(string errorCode)
-        {
-            _errorCode = errorCode;
+            return new RuleValidationResult { Error = propertyValidationError };
         }
     }
 }
