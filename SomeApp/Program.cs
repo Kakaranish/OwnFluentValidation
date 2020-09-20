@@ -1,6 +1,5 @@
 ﻿using CustomValidation.Validators;
 using System.Threading.Tasks;
-using CustomValidation.Misc;
 
 namespace SomeApp
 {
@@ -20,8 +19,6 @@ namespace SomeApp
 
             var validationErrors = personSyncValidator.Validate(person);
             var asyncValidationErrors = await asyncPersonValidator.Validate(person);
-
-            var foo = new AsyncPropertyBuilder<Person, string>();
         }
     }
 }

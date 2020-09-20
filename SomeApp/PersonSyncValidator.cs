@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using CustomValidation;
+﻿using CustomValidation.Extensions;
 using CustomValidation.Validators;
 
 namespace SomeApp

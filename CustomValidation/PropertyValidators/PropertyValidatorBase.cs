@@ -18,6 +18,11 @@ namespace CustomValidation.PropertyValidators
             PropertyDisplayName = property.Name;
         }
 
+        public void AddRule<TProperty>(Predicate<TProperty> validationPredicate, string errorMessage, string errorCode = null)
+        {
+            Rules.Add(new SyncValidationRule<TProperty>(validationPredicate, errorMessage, errorCode));
+        }
+
         public void SetPropertyDisplayName(string propertyDisplayName)
         {
             PropertyDisplayName = propertyDisplayName ?? throw new ArgumentNullException(nameof(propertyDisplayName));

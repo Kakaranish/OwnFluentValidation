@@ -31,8 +31,7 @@ namespace CustomValidation.Validators
             var propertyValidator = new AsyncPropertyValidator<TObject, TProp>(property);
             PropertyValidators.Add(propertyValidator);
 
-            var validationBuilderBase = new PropertyValidationBuilderBase<TObject, TProp>(propertyValidator);
-            return new AsyncPropertyValidationBuilder<TObject, TProp>(validationBuilderBase);
+            return new AsyncPropertyValidationBuilder<TObject, TProp>(propertyValidator);
         }
     }
 }
