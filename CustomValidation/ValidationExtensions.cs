@@ -3,19 +3,14 @@ using CustomValidation.PropertyValidationBuilders;
 
 namespace CustomValidation
 {
+    public static class NewValidationMethods 
+    {
+
+    }
+
+
     public static class ValidationExtensions
     {
-        public static PropertyValidationBuilderBase<TObject, TProperty> IsEqual<TObject, TProperty>(
-            this PropertyValidationBuilderBase<TObject, TProperty> propertyValidationBuilder, TProperty value)
-            where TProperty : IEquatable<TProperty>
-        {
-            var message = $"Value must equal to {value}";
-            const string errorCode = "EQUAL";
-            propertyValidationBuilder.AddRule(x => x.Equals(value), message, errorCode);
-
-            return propertyValidationBuilder;
-        }
-
         public static PropertyValidationBuilderBase<TObject, string> IsEqual<TObject>(
             this PropertyValidationBuilderBase<TObject, string> propertyValidationBuilder, string value, 
             StringComparison stringComparison = StringComparison.CurrentCulture)

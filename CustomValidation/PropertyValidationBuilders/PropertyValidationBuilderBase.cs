@@ -5,34 +5,37 @@ using System.Linq;
 
 namespace CustomValidation.PropertyValidationBuilders
 {
-    public abstract class PropertyValidationBuilderBase<TObject, TProperty> : IPropertyValidationBuilder
+    public class PropertyValidationBuilderBase<TObject, TProperty> : 
+        IPropertyValidationBuilder<PropertyValidationBuilderBase<TObject, TProperty>, TProperty>
     {
-        protected readonly PropertyValidatorBase PropertyValidator;
+        protected readonly PropertyValidatorBase _propertyValidator;
 
-        protected PropertyValidationBuilderBase(PropertyValidatorBase propertyValidator)
+        public  PropertyValidationBuilderBase(PropertyValidatorBase propertyValidator)
         {
-            PropertyValidator = propertyValidator ?? throw new ArgumentNullException(nameof(propertyValidator));
+            _propertyValidator = propertyValidator ?? throw new ArgumentNullException(nameof(propertyValidator));
         }
 
-        public PropertyValidationBuilderBase<TObject, TProperty> AddRule(Predicate<TProperty> validationPredicate,
-            string errorMessage, string errorCode = null)
+        public PropertyValidatorBase PropertyValidator => _propertyValidator;
+
+        public PropertyValidationBuilderBase<TObject, TProperty> AddRule(Predicate<TProperty> validationPredicate, string errorMessage,
+            string errorCode = null)
         {
             var rule = new SyncValidationRule<TProperty>(validationPredicate, errorMessage, errorCode);
-            PropertyValidator.Rules.Add(rule);
+            _propertyValidator.Rules.Add(rule);
 
             return this;
         }
 
         public PropertyValidationBuilderBase<TObject, TProperty> SetPropertyDisplayName(string propertyDisplayName)
         {
-            PropertyValidator.SetPropertyDisplayName(propertyDisplayName);
+            _propertyValidator.SetPropertyDisplayName(propertyDisplayName);
 
             return this;
         }
 
         public PropertyValidationBuilderBase<TObject, TProperty> StopValidationAfterFailure()
         {
-            var lastRule = PropertyValidator.Rules.LastOrDefault();
+            var lastRule = _propertyValidator.Rules.LastOrDefault();
             if (lastRule != null)
             {
                 lastRule.StopValidationAfterFailure = true;
@@ -43,14 +46,14 @@ namespace CustomValidation.PropertyValidationBuilders
 
         public PropertyValidationBuilderBase<TObject, TProperty> WithMessage(string message)
         {
-            PropertyValidator.Rules.LastOrDefault()?.OverrideErrorMessage(message);
+            _propertyValidator.Rules.LastOrDefault()?.OverrideErrorMessage(message);
 
             return this;
         }
 
         public PropertyValidationBuilderBase<TObject, TProperty> WithCode(string code)
         {
-            PropertyValidator.Rules.LastOrDefault()?.OverrideErrorCode(code);
+            _propertyValidator.Rules.LastOrDefault()?.OverrideErrorCode(code);
 
             return this;
         }

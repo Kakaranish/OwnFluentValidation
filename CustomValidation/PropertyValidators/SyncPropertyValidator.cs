@@ -28,7 +28,6 @@ namespace CustomValidation.PropertyValidators
             {
                 var ruleValidationError = rule.Validate(propertyValue);
 
-
                 if (ruleValidationError != null)
                 {
                     ruleValidationErrors.Add(ruleValidationError);

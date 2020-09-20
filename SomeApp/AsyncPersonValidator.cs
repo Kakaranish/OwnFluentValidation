@@ -1,5 +1,6 @@
 ﻿using CustomValidation;
 using System.Threading.Tasks;
+using CustomValidation.PropertyValidationBuilders;
 using CustomValidation.Validators;
 
 namespace SomeApp
@@ -14,7 +15,7 @@ namespace SomeApp
                     await Task.Delay(1000);
                     return false;
                 }, "SOME ERROR XD")
-                .IsNotNull();
+                .WithMessage("");
 
         }
     }
