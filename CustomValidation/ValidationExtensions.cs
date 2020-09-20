@@ -1,5 +1,5 @@
 ﻿using System;
-using CustomValidation.PropertyValidation;
+using CustomValidation.PropertyValidationBuilders;
 
 namespace CustomValidation
 {
@@ -53,7 +53,7 @@ namespace CustomValidation
         {
             var message = "Value cannot be null or empty string";
             const string errorCode = "NOT_NULL_OR_EMPTY";
-            propertyValidationBuilder.AddRule(x => string.IsNullOrEmpty(x), message, errorCode);
+            propertyValidationBuilder.AddRule(x => !string.IsNullOrEmpty(x), message, errorCode);
 
             return propertyValidationBuilder;
         }
@@ -63,7 +63,7 @@ namespace CustomValidation
         {
             var message = "Value cannot be null or whitespace";
             const string errorCode = "NOT_NULL_OR_WHITE_SPACE";
-            propertyValidationBuilder.AddRule(x => string.IsNullOrWhiteSpace(x), message, errorCode);
+            propertyValidationBuilder.AddRule(x => !string.IsNullOrWhiteSpace(x), message, errorCode);
 
             return propertyValidationBuilder;
         } 

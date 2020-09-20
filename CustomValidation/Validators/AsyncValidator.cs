@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using CustomValidation.PropertyValidation;
+using CustomValidation.PropertyValidationBuilders;
+using CustomValidation.PropertyValidators;
 using CustomValidation.Types;
 
 namespace CustomValidation.Validators
@@ -12,10 +13,10 @@ namespace CustomValidation.Validators
     {
         public async Task<ValidationResult> Validate(TObject objToValidate)
         {
-            var casted = PropertyValidationBuilders.Cast<IAsyncPropertyValidator>();
+            var propertyValidators = PropertyValidators.Cast<IAsyncPropertyValidator>();
 
             var propertyValidationErrors = new List<PropertyValidationResult>();
-            foreach (var asyncPropertyValidator in casted)
+            foreach (var asyncPropertyValidator in propertyValidators)
             {
                 var propertyValidationResult = await asyncPropertyValidator.Validate(objToValidate);
                 propertyValidationErrors.Add(propertyValidationResult);
@@ -26,12 +27,11 @@ namespace CustomValidation.Validators
 
         protected AsyncPropertyValidationBuilder<TObject, TProp> RuleFor<TProp>(Expression<Func<TObject, TProp>> expression)
         {
-            var memberExpression = ExtractMemberExpression(expression);
+            var property = ExtractProperty(expression);
+            var propertyValidator = new AsyncPropertyValidator<TObject, TProp>(property);
+            PropertyValidators.Add(propertyValidator);
 
-            var propertyRuleBuilder = new AsyncPropertyValidationBuilder<TObject, TProp>(memberExpression);
-            PropertyValidationBuilders.Add(propertyRuleBuilder);
-
-            return propertyRuleBuilder;
+            return new AsyncPropertyValidationBuilder<TObject, TProp>(propertyValidator);
         }
     }
 }

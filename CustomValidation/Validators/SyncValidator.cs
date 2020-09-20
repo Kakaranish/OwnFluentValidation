@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
-using CustomValidation.PropertyValidation;
+using CustomValidation.PropertyValidationBuilders;
+using CustomValidation.PropertyValidators;
 using CustomValidation.Types;
 
 namespace CustomValidation.Validators
@@ -10,22 +11,21 @@ namespace CustomValidation.Validators
     {
         public ValidationResult Validate(TObject objToValidate)
         {
-            var propertyValidators = PropertyValidationBuilders.Cast<ISyncPropertyValidator>();
+            var propertyValidators = PropertyValidators.Cast<ISyncPropertyValidator>();
             
-            var propertyValidationErrors = propertyValidators.Select(propertyRuleBuilder =>
-                propertyRuleBuilder.Validate(objToValidate));
+            var propertyValidationErrors = propertyValidators.Select(propertyValidator => 
+                propertyValidator.Validate(objToValidate)).ToList();
 
             return new ValidationResult(propertyValidationErrors);
         }
 
         protected SyncPropertyValidationBuilder<TObject, TProp> RuleFor<TProp>(Expression<Func<TObject, TProp>> expression)
         {
-            var memberExpression = ExtractMemberExpression(expression);
+            var property = ExtractProperty(expression);
+            var propertyValidator = new SyncPropertyValidator<TObject, TProp>(property);
+            PropertyValidators.Add(propertyValidator);
 
-            var propertyRuleBuilder = new SyncPropertyValidationBuilder<TObject, TProp>(memberExpression);
-            PropertyValidationBuilders.Add(propertyRuleBuilder);
-            
-            return propertyRuleBuilder;
+            return new SyncPropertyValidationBuilder<TObject, TProp>(propertyValidator);
         }
     }
 }

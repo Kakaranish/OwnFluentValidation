@@ -13,15 +13,13 @@ namespace CustomValidation.Rules
             _validationPredicate = validationPredicate ?? throw new ArgumentNullException(nameof(validationPredicate));
         }
 
-        public RuleValidationResult Validate(object propertyValueObj)
+        public RuleValidationError Validate(object propertyValueObj)
         {
             var propertyValue = (TProperty) propertyValueObj;
 
-            var propertyValidationError = !_validationPredicate(propertyValue)
-                ? new RuleValidationError(ErrorMessage, ErrorCode)
-                : null;
-
-            return new RuleValidationResult { Error = propertyValidationError };
+            return _validationPredicate(propertyValue) 
+                ? null 
+                : new RuleValidationError(ErrorMessage, ErrorCode);
         }
     }
 }

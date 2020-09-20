@@ -4,6 +4,6 @@ namespace CustomValidation.Rules
 {
     public interface ISyncValidationRule
     {
-        RuleValidationResult Validate(object propertyValueObj);
+        RuleValidationError Validate(object propertyValueObj);
     }
 }

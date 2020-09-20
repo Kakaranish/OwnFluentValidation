@@ -1,4 +1,4 @@
-﻿namespace CustomValidation.PropertyValidation
+﻿namespace CustomValidation.PropertyValidationBuilders
 {
     public interface IPropertyValidationBuilder
     {

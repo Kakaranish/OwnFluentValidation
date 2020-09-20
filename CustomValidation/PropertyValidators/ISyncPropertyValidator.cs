@@ -1,6 +1,6 @@
 ﻿using CustomValidation.Types;
 
-namespace CustomValidation.PropertyValidation
+namespace CustomValidation.PropertyValidators
 {
     public interface ISyncPropertyValidator
     {

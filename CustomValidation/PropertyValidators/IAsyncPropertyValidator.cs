@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using CustomValidation.Types;
 
-namespace CustomValidation.PropertyValidation
+namespace CustomValidation.PropertyValidators
 {
     public interface IAsyncPropertyValidator
     {

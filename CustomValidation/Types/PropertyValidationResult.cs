@@ -7,9 +7,9 @@ namespace CustomValidation.Types
     public class PropertyValidationResult
     {
         public string PropertyName { get; set; }
-        public IEnumerable<RuleValidationError> RuleValidationErrors { get; set; }
+        public IList<RuleValidationError> RuleValidationErrors { get; set; }
 
-        public PropertyValidationResult(string propertyName, IEnumerable<RuleValidationError> ruleValidationErrors)
+        public PropertyValidationResult(string propertyName, IList<RuleValidationError> ruleValidationErrors)
         {
             PropertyName = propertyName ?? throw new ArgumentNullException(nameof(propertyName));
             RuleValidationErrors = ruleValidationErrors;

@@ -1,10 +1,10 @@
-﻿using System.Threading.Tasks;
-using CustomValidation.Types;
+﻿using CustomValidation.Types;
+using System.Threading.Tasks;
 
 namespace CustomValidation.Rules
 {
     public interface IAsyncValidationRule
     {
-        Task<RuleValidationResult> Validate(object propertyValueObj);
+        Task<RuleValidationError> Validate(object propertyValueObj);
     }
 }

@@ -1,14 +1,14 @@
-﻿using System;
+﻿using CustomValidation.PropertyValidators;
+using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using CustomValidation.PropertyValidation;
+using System.Reflection;
 
 namespace CustomValidation.Validators
 {
     public abstract class ValidatorBase<TObject>
     {
-        protected readonly IList<IPropertyValidationBuilder> PropertyValidationBuilders = 
-            new List<IPropertyValidationBuilder>();
+        protected readonly IList<PropertyValidatorBase> PropertyValidators = new List<PropertyValidatorBase>();
 
         protected ValidatorBase()
         {
@@ -17,7 +17,7 @@ namespace CustomValidation.Validators
 
         protected abstract void SetupRules();
 
-        protected MemberExpression ExtractMemberExpression<TProp>(Expression<Func<TObject, TProp>> expression)
+        protected PropertyInfo ExtractProperty<TProp>(Expression<Func<TObject, TProp>> expression)
         {
             if (!(expression.Body is MemberExpression memberExpression))
             {
@@ -29,7 +29,13 @@ namespace CustomValidation.Validators
                 throw new InvalidOperationException(nameof(memberExpression));
             }
 
-            return memberExpression;
+            var property = typeof(TObject).GetProperty(memberExpression.Member.Name);
+            if (property == null)
+            {
+                throw new InvalidOperationException("Property from member expression is null");
+            }
+
+            return property;
         }
     }
 }

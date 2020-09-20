@@ -5,12 +5,11 @@ namespace CustomValidation.Types
 {
     public class ValidationResult
     {
-        public IEnumerable<PropertyValidationResult> PropertyValidationResults { get; }
+        public IList<PropertyValidationResult> PropertyValidationResults { get; }
 
-        public bool Success => PropertyValidationResults == null || !PropertyValidationResults.Any();
-        public bool Failure => !Success;
+        public bool Succeeded => PropertyValidationResults == null || !PropertyValidationResults.Any();
 
-        public ValidationResult(IEnumerable<PropertyValidationResult> propertyValidationErrors)
+        public ValidationResult(IList<PropertyValidationResult> propertyValidationErrors)
         {
             PropertyValidationResults = propertyValidationErrors;
         }

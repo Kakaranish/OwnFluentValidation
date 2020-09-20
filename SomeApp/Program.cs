@@ -1,6 +1,5 @@
-﻿using System.Threading.Tasks;
-using CustomValidation;
-using CustomValidation.Validators;
+﻿using CustomValidation.Validators;
+using System.Threading.Tasks;
 
 namespace SomeApp
 {
@@ -17,7 +16,7 @@ namespace SomeApp
 
             ISyncValidator<Person> personSyncValidator = new PersonSyncValidator();
             IAsyncValidator<Person> asyncPersonValidator = new AsyncPersonValidator();
-            
+
             var validationErrors = personSyncValidator.Validate(person);
             var asyncValidationErrors = await asyncPersonValidator.Validate(person);
         }
