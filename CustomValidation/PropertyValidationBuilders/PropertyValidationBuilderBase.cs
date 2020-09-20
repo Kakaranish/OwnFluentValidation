@@ -4,10 +4,9 @@ using CustomValidation.Rules;
 
 namespace CustomValidation.PropertyValidationBuilders
 {
-    public abstract class PropertyValidationBuilderBase<TBuilder, TProperty> 
-        where TBuilder : IPropertyValidationBuilder<TBuilder, TProperty>
+    public abstract class PropertyValidationBuilderBase<TBuilder, TProperty>
     {
-        private TBuilder _builder;
+        private readonly TBuilder _builder;
         
         protected readonly PropertyValidatorBase BasePropertyValidator;
 
