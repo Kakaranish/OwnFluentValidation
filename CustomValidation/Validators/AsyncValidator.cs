@@ -13,7 +13,7 @@ namespace CustomValidation.Validators
     {
         public async Task<ValidationResult> Validate(TObject objToValidate)
         {
-            var propertyValidators = PropertyValidators.Cast<IAsyncPropertyValidator>();
+            var propertyValidators = InnerPropertyValidators.Cast<IAsyncPropertyValidator>();
 
             var propertyValidationErrors = new List<PropertyValidationResult>();
             foreach (var asyncPropertyValidator in propertyValidators)
@@ -29,7 +29,7 @@ namespace CustomValidation.Validators
         {
             var property = ExtractProperty(expression);
             var propertyValidator = new AsyncPropertyValidator<TObject, TProp>(property);
-            PropertyValidators.Add(propertyValidator);
+            InnerPropertyValidators.Add(propertyValidator);
 
             return new AsyncPropertyValidationBuilder<TObject, TProp>(propertyValidator);
         }

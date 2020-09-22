@@ -4,7 +4,7 @@ namespace CustomValidation.Extensions
 {
     public static class GeneralValidationExtensions
     {
-        public static TBuilder IsNull<TBuilder, TProperty>(this IPropertyValidationBuilder<TBuilder, TProperty> builder)
+        public static TBuilder IsNull<TBuilder, TProperty>(this PropertyValidationBuilderBase<TBuilder, TProperty> builder)
         {
             var message = "Value must be null";
             const string errorCode = "NULL";
@@ -13,7 +13,7 @@ namespace CustomValidation.Extensions
             return builder.Builder;
         }
 
-        public static TBuilder IsNotNull<TBuilder, TProperty>(this IPropertyValidationBuilder<TBuilder, TProperty> builder)
+        public static TBuilder IsNotNull<TBuilder, TProperty>(this PropertyValidationBuilderBase<TBuilder, TProperty> builder)
         {
             var message = "Value cannot be null";
             const string errorCode = "NOT_NULL";

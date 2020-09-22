@@ -6,7 +6,7 @@ namespace CustomValidation.Extensions
     public static class NumberValidationExtensions
     {
         public static TBuilder IsGreaterThan<TBuilder, TNumber>(
-            this IPropertyValidationBuilder<TBuilder, TNumber> builder, TNumber value)
+            this PropertyValidationBuilderBase<TBuilder, TNumber> builder, TNumber value)
             where TNumber : IComparable<TNumber>
         {
             var message = $"Value must be greater than {value}";
@@ -17,7 +17,7 @@ namespace CustomValidation.Extensions
         }
 
         public static TBuilder IsGreaterThanOrEqualTo<TBuilder, TNumber>(
-            this IPropertyValidationBuilder<TBuilder, TNumber> builder, TNumber value)
+            this PropertyValidationBuilderBase<TBuilder, TNumber> builder, TNumber value)
             where TNumber : IComparable<TNumber>
         {
             var message = $"Value must be greater than or equal to {value}";
@@ -28,7 +28,7 @@ namespace CustomValidation.Extensions
         }
 
         public static TBuilder IsLessThan<TBuilder, TNumber>(
-            this IPropertyValidationBuilder<TBuilder, TNumber> builder, TNumber value)
+            this PropertyValidationBuilderBase<TBuilder, TNumber> builder, TNumber value)
             where TNumber : IComparable<TNumber>
         {
             var message = $"Value must be less than {value}";
@@ -39,7 +39,7 @@ namespace CustomValidation.Extensions
         }
 
         public static TBuilder IsLessThanOrEqualTo<TBuilder, TNumber>(
-            this IPropertyValidationBuilder<TBuilder, TNumber> builder, TNumber value)
+            this PropertyValidationBuilderBase<TBuilder, TNumber> builder, TNumber value)
             where TNumber : IComparable<TNumber>
         {
             var message = $"Value must be less than or equal to {value}";

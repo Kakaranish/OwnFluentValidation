@@ -6,7 +6,7 @@ namespace CustomValidation.Extensions
     public static class ValidationFlowExtensions
     {
         public static TBuilder SetPropertyDisplayName<TBuilder, TProperty>(
-            this IPropertyValidationBuilder<TBuilder, TProperty> builder, string propertyDisplayName)
+            this PropertyValidationBuilderBase<TBuilder, TProperty> builder, string propertyDisplayName)
         {
             builder.PropertyValidator.SetPropertyDisplayName(propertyDisplayName);
 
@@ -14,7 +14,7 @@ namespace CustomValidation.Extensions
         }
 
         public static TBuilder StopValidationAfterFailure<TBuilder, TProperty>(
-            this IPropertyValidationBuilder<TBuilder, TProperty> builder)
+            this PropertyValidationBuilderBase<TBuilder, TProperty> builder)
         {
             var propertyValidator = builder.PropertyValidator;
             var lastRule = propertyValidator.Rules.LastOrDefault();
@@ -26,7 +26,7 @@ namespace CustomValidation.Extensions
             return builder.Builder;
         }
         public static TBuilder WithMessage<TBuilder, TProperty>(
-            this IPropertyValidationBuilder<TBuilder, TProperty> builder, string message)
+            this PropertyValidationBuilderBase<TBuilder, TProperty> builder, string message)
         {
             builder.PropertyValidator.Rules.LastOrDefault()?.OverrideErrorMessage(message);
 
@@ -34,7 +34,7 @@ namespace CustomValidation.Extensions
         }
 
         public static TBuilder WithCode<TBuilder, TProperty>(
-            this IPropertyValidationBuilder<TBuilder, TProperty> builder, string code)
+            this PropertyValidationBuilderBase<TBuilder, TProperty> builder, string code)
         {
             builder.PropertyValidator.Rules.LastOrDefault()?.OverrideErrorCode(code);
 

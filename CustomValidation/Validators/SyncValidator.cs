@@ -11,7 +11,7 @@ namespace CustomValidation.Validators
     {
         public ValidationResult Validate(TObject objToValidate)
         {
-            var propertyValidators = PropertyValidators.Cast<ISyncPropertyValidator>();
+            var propertyValidators = InnerPropertyValidators.Cast<ISyncPropertyValidator>();
             
             var propertyValidationErrors = propertyValidators.Select(propertyValidator => 
                 propertyValidator.Validate(objToValidate)).ToList();
@@ -23,7 +23,7 @@ namespace CustomValidation.Validators
         {
             var property = ExtractProperty(expression);
             var propertyValidator = new SyncPropertyValidator<TObject, TProp>(property);
-            PropertyValidators.Add(propertyValidator);
+            InnerPropertyValidators.Add(propertyValidator);
 
             return new SyncPropertyValidationBuilder<TObject, TProp>(propertyValidator);
         }

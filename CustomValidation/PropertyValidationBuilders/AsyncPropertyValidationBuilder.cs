@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 namespace CustomValidation.PropertyValidationBuilders
 {
     public class AsyncPropertyValidationBuilder<TObject, TProperty> : 
-        PropertyValidationBuilderBase<AsyncPropertyValidationBuilder<TObject, TProperty>, TProperty>,
-        IPropertyValidationBuilder<AsyncPropertyValidationBuilder<TObject, TProperty>, TProperty>
+        PropertyValidationBuilderBase<AsyncPropertyValidationBuilder<TObject, TProperty>, TProperty>
     {
         public AsyncPropertyValidationBuilder(PropertyValidatorBase propertyValidator) : base(propertyValidator)
         {
         }
+
+        public override AsyncPropertyValidationBuilder<TObject, TProperty> Builder => this;
+        public override PropertyValidatorBase PropertyValidator => BasePropertyValidator;
 
         public AsyncPropertyValidationBuilder<TObject, TProperty> AddAsyncRule(Func<TProperty, Task<bool>> validationPredicate,
             string errorMessage, string errorCode = null)
@@ -21,8 +23,5 @@ namespace CustomValidation.PropertyValidationBuilders
 
             return this;
         }
-
-        public AsyncPropertyValidationBuilder<TObject, TProperty> Builder => this;
-        public PropertyValidatorBase PropertyValidator => BasePropertyValidator;
     }
 }

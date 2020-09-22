@@ -7,7 +7,7 @@ namespace CustomValidation.PropertyValidators
 {
     public abstract class PropertyValidatorBase
     {
-        public IList<ValidationRuleBase> Rules { get; } = new List<ValidationRuleBase>();
+        public List<ValidationRuleBase> Rules { get; } = new List<ValidationRuleBase>();
 
         protected readonly PropertyInfo Property;
         protected string PropertyDisplayName;

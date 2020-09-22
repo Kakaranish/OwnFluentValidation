@@ -8,14 +8,22 @@ namespace CustomValidation.Validators
 {
     public abstract class ValidatorBase<TObject>
     {
-        protected readonly IList<PropertyValidatorBase> PropertyValidators = new List<PropertyValidatorBase>();
+        protected readonly List<PropertyValidatorBase> InnerPropertyValidators = new List<PropertyValidatorBase>();
 
         protected ValidatorBase()
         {
             SetupRules();
         }
 
+        public IReadOnlyList<PropertyValidatorBase> PropertyValidators => InnerPropertyValidators;
+
         protected abstract void SetupRules();
+
+        public void UseValidator<TValidator>() where TValidator : ValidatorBase<TObject>
+        {
+            var otherValidator = Activator.CreateInstance<TValidator>();
+            InnerPropertyValidators.AddRange(otherValidator.InnerPropertyValidators);
+        }
 
         protected PropertyInfo ExtractProperty<TProp>(Expression<Func<TObject, TProp>> expression)
         {

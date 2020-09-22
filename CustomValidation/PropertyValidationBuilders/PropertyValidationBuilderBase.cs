@@ -1,19 +1,23 @@
 ﻿using CustomValidation.PropertyValidators;
-using System;
 using CustomValidation.Rules;
+using CustomValidation.Validators;
+using System;
 
 namespace CustomValidation.PropertyValidationBuilders
 {
     public abstract class PropertyValidationBuilderBase<TBuilder, TProperty>
     {
         private readonly TBuilder _builder;
-        
+
         protected readonly PropertyValidatorBase BasePropertyValidator;
+
+        public abstract TBuilder Builder { get; }
+        public abstract PropertyValidatorBase PropertyValidator { get; }
 
         protected PropertyValidationBuilderBase(PropertyValidatorBase propertyValidator)
         {
-            _builder = (TBuilder) (object) this;
-            
+            _builder = (TBuilder)(object)this;
+
             BasePropertyValidator = propertyValidator ?? throw new ArgumentNullException(nameof(propertyValidator));
         }
 
