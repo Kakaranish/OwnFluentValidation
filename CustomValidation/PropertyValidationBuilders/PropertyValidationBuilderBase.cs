@@ -1,6 +1,5 @@
 ﻿using CustomValidation.PropertyValidators;
 using CustomValidation.Rules;
-using CustomValidation.Validators;
 using System;
 
 namespace CustomValidation.PropertyValidationBuilders
