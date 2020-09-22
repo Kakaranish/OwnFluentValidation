@@ -7,30 +7,35 @@ using System.Threading.Tasks;
 
 namespace SomeWebApp.Filters
 {
-    public class ValidateAttribute : ActionFilterAttribute
+    public class ValidateAsyncAttribute : ActionFilterAttribute
     {
-        private static readonly Type ValidatorType = typeof(SyncValidator<>);
+        private static readonly Type ValidatorType = typeof(AsyncValidator<>);
 
         public Type TypeToValidate { get; set; }
 
-        public override Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
+        public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
             var valueValidatorPair = TypeToValidate != null
                 ? ValidateAttributeCommon.GetValueValidatorExplicitly(context, ValidatorType, TypeToValidate)
                 : ValidateAttributeCommon.GetValueValidatorImplicitly(context, ValidatorType);
 
             var validationMethod = valueValidatorPair.Validator.GetType().GetMethod("Validate");
-            var validationResult = (ValidationResult)validationMethod?.Invoke(
+            var validationTask = (Task<ValidationResult>)validationMethod?.Invoke(
                 valueValidatorPair.Validator, new[] { valueValidatorPair.Value });
+
+            if (validationTask == null)
+            {
+                throw new InvalidOperationException(nameof(validationTask));
+            }
+            var validationResult = await validationTask;
 
             if (validationResult.Succeeded)
             {
-                return base.OnActionExecutionAsync(context, next);
+                await base.OnActionExecutionAsync(context, next);
+                return;
             }
 
             context.Result = new BadRequestObjectResult(validationResult);
-
-            return Task.CompletedTask;
         }
     }
 }
